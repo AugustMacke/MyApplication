@@ -1,5 +1,6 @@
 package de.fh_muenster.myapplication;
 
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,6 +13,9 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Call for every Main Activity
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
     }
 
 

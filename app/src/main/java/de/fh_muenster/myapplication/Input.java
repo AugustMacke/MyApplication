@@ -1,5 +1,6 @@
 package de.fh_muenster.myapplication;
 
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,6 +18,9 @@ public class Input extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input);
+
+        //Call for every Main Activity
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
     }
 
 
@@ -72,4 +76,10 @@ public class Input extends ActionBarActivity {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
+
+    private void calc()
+    {
+
+    }
+
 }

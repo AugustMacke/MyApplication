@@ -1,6 +1,8 @@
 package de.fh_muenster.myapplication;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,12 +15,16 @@ public class Output extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String title = sharedPref.getString("pref_title", "");
+
         Intent intent = getIntent();
         String message = intent.getStringExtra(Input.EXTRA_MESSAGE);
 
         TextView textView = new TextView(this);
         textView.setTextSize(40);
-        textView.setText(message);
+        textView.setText(title + " " + message);
         setContentView(textView);
 
     }
