@@ -1,6 +1,10 @@
 package de.fh_muenster.myapplication;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.IntentFilter;
 import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,6 +13,7 @@ import android.view.MenuItem;
 import android.content.Intent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 
 public class Input extends ActionBarActivity {
@@ -21,6 +26,26 @@ public class Input extends ActionBarActivity {
 
         //Call for every Main Activity
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
+
+        //// ### For Background Service: ###
+
+        // The filter's action is BROADCAST_ACTION
+        IntentFilter mStatusIntentFilter = new IntentFilter(
+                Constants.BROADCAST_ACTION);
+
+        // Adds a data filter for the HTTP scheme
+        mStatusIntentFilter.addDataScheme("http");
+
+        // Instantiates a new DownloadStateReceiver
+        ResponseReceiver mDownloadStateReceiver =
+                new ResponseReceiver();
+        // Registers the DownloadStateReceiver and its intent filters
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                mDownloadStateReceiver,
+                mStatusIntentFilter);
+
+        //// ###  end  ###
     }
 
 
@@ -77,9 +102,34 @@ public class Input extends ActionBarActivity {
         startActivity(intent);
     }
 
-    private void calc()
+    public void calc(View view)
     {
-
+        // Start the background-service when button is pushed
+        Intent mServiceIntent = new Intent(this, CalcService.class);
+        startService(mServiceIntent);
     }
 
+
+    /*
+        This class is to receive data from the background thread
+     */
+    private class ResponseReceiver extends BroadcastReceiver
+    {
+        // Prevents instantiation
+        private ResponseReceiver()
+        {
+            // Calls the constructor for BroadcastReceiver
+            super();
+        }
+
+        // Called when the BroadcastReceiver gets an Intent it's registered to receive
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            Integer calcValue = intent.getIntExtra(Constants.EXTENDED_DATA_STATUS, 0);
+            TextView txtView = (TextView) findViewById(R.id.txtCalc);
+            txtView.setText("Ergebnis: " + calcValue);
+        }
+
+    }
 }

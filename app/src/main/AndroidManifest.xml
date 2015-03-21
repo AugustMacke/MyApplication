@@ -28,6 +28,10 @@
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
+        <service
+            android:name=".CalcService"
+            android:exported="false"/>
+
     </application>
 
 </manifest>
